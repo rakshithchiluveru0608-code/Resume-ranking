@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FileUpload from "@/components/FileUpload";
 import { useResults, mapApiResponse } from "@/lib/resultsContext";
+import { API_BASE } from "@/lib/api";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Dashboard = () => {
       if (resumeFiles.length === 1) {
         // Single resume → /api/analyze
         formData.append("resume", resumeFiles[0]);
-        const res = await fetch("/api/analyze", { method: "POST", body: formData });
+        const res = await fetch(`${API_BASE}/api/analyze`, { method: "POST", body: formData });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
           throw new Error(err.error || `Server error ${res.status}`);
@@ -55,7 +56,7 @@ const Dashboard = () => {
       } else {
         // Multiple resumes → /api/rank
         resumeFiles.forEach((f) => formData.append("resumes", f));
-        const res = await fetch("/api/rank", { method: "POST", body: formData });
+        const res = await fetch(`${API_BASE}/api/rank`, { method: "POST", body: formData });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
           throw new Error(err.error || `Server error ${res.status}`);
